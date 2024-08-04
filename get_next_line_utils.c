@@ -6,7 +6,9 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/03 18:33:35 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:44:55 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+strlen, memcpy, strdup, strjoin

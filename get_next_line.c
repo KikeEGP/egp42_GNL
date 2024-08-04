@@ -6,18 +6,19 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/03 22:47:07 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:58:07 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static	end_line(const char *s) //As strchr, but just for '\n'
+static	end_line(const char *s) /*As strchr, but just for '\n'*/
 {
 	while (*s)
 	{
 		if (*s == '\n')
-			return ((char *)s);
+			return ((char *)s+1);//If finds end of line, will
+					     //return pointer to new line
 		s++;
 	}
 	return (0)
@@ -25,16 +26,15 @@ static	end_line(const char *s) //As strchr, but just for '\n'
 
 char	*get_next_line(int fd)
 {
-	char	*line; //May you need to allocate mem here?
-		       //How many? Maybe, BUFFER_SIZE plus BUF_SIZE...
-		       //until you don't reach \n?
-	char	aux[BUFFER_SIZE + 1];
+	char	*line; 
+	char	aux;
 	char	*buf;
 	ssize_t	nb_read;
-	int	i;
 
-	i = 1;		//index to count times read() is called
-	while (nb_read != 0)
+	while (nb_read != 0) //Maybe this while must be until I don't find
+			     //the \n, because I don't have to reach
+			     //end of line. Maybe I need to be prepared
+			     //for both cases, though
 	{
 		nb_read = read (fd, buf, BUFFER_SIZE); //May I protect
 						       //the BUFFER_SIZE
@@ -53,17 +53,19 @@ char	*get_next_line(int fd)
 		//Before you save the buffer in heap, check it wth strchr
 		//If there's no \n, copy complete. If you find \n,
 		//copy just to \n, an keep next chars for next line
-		if (!end_line(buf))
+		if (!end_line(buf)) //Maybe I need do this in case of \n too
 		{
-		
-			aux = strdup(line);
-			line = (char *)malloc(i * BUFFER_SIZE + 1);
-			line = memcpy(line, aux, strlen(aux));
-			//How to do the copy? Strlcpy, memcpy, what?
-			//Do I have memory allocated for this?
-			//How to manage empty vars at the begining???????
+			aux = strjoin(line, buf);
+			if (line)
+				free(line);
+			line = strdup(aux);
 		}
-		i++;
+		if (end_line(buf))
+		{
+			//Now I only want to store in line from buf[0]
+			//to buf[n] == end_line(buf). HOW?
+		}
+
 	}
 	return (line);
 }
@@ -74,5 +76,12 @@ int	main(void)
 	char	*lines;
 
 	fd = open("trying_read.txt", O_RDONLY);
+	while (get_next_line(fd) != NULL)
+	{	
+		lines = get_next_line(fd);
+		if (lines)
+			printf("%s", lines);
+		free(lines);
+	}
 	return (0);
 }*/
