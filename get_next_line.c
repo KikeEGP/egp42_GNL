@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/08 19:44:48 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/08 19:47:37 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ char	*get_next_line(int fd)
 	char	*buf;
 	ssize_t	nb_read;
 
+
+	buf = (char *)malloc((nb_read + 1) * sizeof(char));
+		//Don't forget to asign '\0'
+		//
 	while (nb_read != 0) //Maybe this while must be until I don't find
 			     //the \n, because I don't have to reach
 			     //end of line. Maybe I need to be prepared
@@ -42,9 +46,6 @@ char	*get_next_line(int fd)
 						       //from SSIZE_MAX value
 		if (nb_read < 0)
 			return (NULL);
-		buf = (char *)malloc((nb_read + 1) * sizeof(char));
-		//Don't forget to asign '\0'
-		//
 		//I must allocate memory now
 		//TARGET: save all buffers in a string that we will 
 		//return as "line" when we reach '\n'
