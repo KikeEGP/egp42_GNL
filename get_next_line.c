@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/08 21:40:25 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/08 21:51:24 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ char	*get_next_line(int fd)
 					    // TO READ FIRST
 			len = (strlen(line) - strlen(end));
 			line = substr(line, 0, len);
+			free(/*WATCH OUT, SOMETHINNG MUST BE FREE
+			OR TAKE LESS MEMORY INSTEAD*/)
 			if (!line)
 			{
 				free(line);
