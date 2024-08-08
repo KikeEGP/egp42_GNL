@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/08 19:47:37 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/08 21:40:25 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,48 +27,53 @@ static char	*end_line(const char *s) /*As strchr, but just for '\n'*/
 
 char	*get_next_line(int fd)
 {
-	char	*line; 
-	char	aux;
-	char	*buf;
-	ssize_t	nb_read;
+	char		*line; 
+	char		aux;
+	static	char	*buf;
+	ssize_t		nb_read;
 
-
-	buf = (char *)malloc((nb_read + 1) * sizeof(char));
+	buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buf)
+		return (0);
 		//Don't forget to asign '\0'
 		//
+	nb_read = -1;
 	while (nb_read != 0) //Maybe this while must be until I don't find
 			     //the \n, because I don't have to reach
 			     //end of line. Maybe I need to be prepared
 			     //for both cases, though
 	{
-		nb_read = read (fd, buf, BUFFER_SIZE); //May I protect
+		nb_read = read(fd, buf, BUFFER_SIZE); //May I protect
 						       //the BUFFER_SIZE
 						       //from SSIZE_MAX value
 		if (nb_read < 0)
 			return (NULL);
-		//I must allocate memory now
-		//TARGET: save all buffers in a string that we will 
-		//return as "line" when we reach '\n'
-		//
-		//So... have we reached the \n? You should check it
-		//
-		//Before you save the buffer in heap, check it wth strchr
-		//If there's no \n, copy complete. If you find \n,
-		//what can you do? Save all and then only return until \n?
-		//Save until \n, and take \n+1 for next line?
-		if (!end_line(buf)) //Maybe I need do this in case of \n too
-		{
-			aux = strjoin(line, buf);
-			if (line)
-				free(line);
+		aux = strjoin(line, buf);
+		if (line)
+			free(line);
+		if (!end_line(buf))
 			line = strdup(aux);
-		}
 		if (end_line(buf))
 		{
-			
+			end = end_line(buf);// REMOVE THIS LINE!!!
+					    // THIS FUNCTION MUST RUN WITH
+					    // FIRST CALL OR 25th CALL
+					    // SO BUFFER MUST BE ALWAYS
+					    // THE VAR WHICH LOCATES THE POINTER
+					    // TO READ FIRST
+			len = (strlen(line) - strlen(end));
+			line = substr(line, 0, len);
+			if (!line)
+			{
+				free(line);
+				return (NULL);
+			}
+		}
+		
+		//So... have we reached the \n? 
+				  //You should check it
 			//Now I only want to store in line from buf[0]
 			//to buf[n] == end_line(buf). HOW?
-		}
 
 	}
 	return (line);
