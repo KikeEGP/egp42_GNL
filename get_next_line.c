@@ -6,22 +6,23 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/04 20:58:07 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/08 19:44:48 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static	end_line(const char *s) /*As strchr, but just for '\n'*/
+static char	*end_line(const char *s) /*As strchr, but just for '\n'*/
 {
 	while (*s)
 	{
 		if (*s == '\n')
-			return ((char *)s+1);//If finds end of line, will
-					     //return pointer to new line
+			return ((unsigned char *)s+1);
+					//If finds end of line, will
+					//return pointer to new line
 		s++;
 	}
-	return (0)
+	return (0);
 }
 
 char	*get_next_line(int fd)
@@ -41,18 +42,19 @@ char	*get_next_line(int fd)
 						       //from SSIZE_MAX value
 		if (nb_read < 0)
 			return (NULL);
-		buf[nb_read] = '\0'; //doing this, buffer is converted
-				     //to string, which we can manage
-				     //TARGET: save all buffers in a
-				     //string that we will return as "line"
-				     //when we reach '\n'
+		buf = (char *)malloc((nb_read + 1) * sizeof(char));
+		//Don't forget to asign '\0'
+		//
+		//I must allocate memory now
+		//TARGET: save all buffers in a string that we will 
+		//return as "line" when we reach '\n'
+		//
 		//So... have we reached the \n? You should check it
-		//Also, you have to save content 
-		//from the buffer in a heap's var
 		//
 		//Before you save the buffer in heap, check it wth strchr
 		//If there's no \n, copy complete. If you find \n,
-		//copy just to \n, an keep next chars for next line
+		//what can you do? Save all and then only return until \n?
+		//Save until \n, and take \n+1 for next line?
 		if (!end_line(buf)) //Maybe I need do this in case of \n too
 		{
 			aux = strjoin(line, buf);
@@ -62,6 +64,7 @@ char	*get_next_line(int fd)
 		}
 		if (end_line(buf))
 		{
+			
 			//Now I only want to store in line from buf[0]
 			//to buf[n] == end_line(buf). HOW?
 		}
