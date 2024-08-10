@@ -6,11 +6,19 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/09 20:50:05 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/10 22:45:11 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+static int	wrong(char *line, char *buf, static char * aux);
+{
+	free(line);
+	free(buf);
+	free(aux);
+	return (NULL);
+}
 
 static char	*end_line(const char *s) /*As strchr, but just for '\n'*/
 {
@@ -45,12 +53,17 @@ static char	*line_returned(char *aux)/*It's like substr,
 
 char	*get_next_line(int fd)
 {
-	char	*line;
-	char	aux;
-	char	*buf;
-	ssize_t	nb_read;
+	static char	*aux;
+	char		*line;
+	char		*buf;
+	ssize_t		nb_read;
 
-	while (/*????????????*/)/*LOOP MUST STOP AFTER end_line(buf)!!*/
+	if (aux)
+	{
+			line = dup_line(aux);
+			free(aux);
+	}
+	while (nb_read != 0)
 	{
 		nb_read = read(fd, buf, BUFFER_SIZE); //May I protect
 						       //the BUFFER_SIZE
@@ -61,23 +74,32 @@ char	*get_next_line(int fd)
 		aux = join_line(line, buf);
 		if (!aux)
 			return (NULL);
-		free(line);
-		if (end_line(buf))
+		if (end_line(buf)) /*This conditional must stop the function*/
 		{
 			line = line_returned(aux);
-			free(/*WATCH OUT, SOMETHINNG MUST BE FREE
-			OR TAKE LESS MEMORY INSTEAD*/)
+			if (!line)
+			{
+				free(line);
+				free(buf);
+				free(aux);
+				return (NULL);
+			}
+			free(buf);
 		}
 		else
-			line = dup_line(aux);//End of file or not found \n
-		//else
 		{
-			/*A FUNCTION TO CHECK IF MUST RETURN NULL AND/OR FREE*/
-			//free(line);
-			//return (NULL);
+			line = dup_line(aux);//End of file or not found \n
+			free(aux);
+			free(buf);
+			if (!line)
+			{
+				free(line);
+				return (NULL);
+			}
 		}
 	}
-	return	(line);}
+	return	(line);// if nb_read == 0, return line that we have
+}
 /*
 int	main(void)
 {

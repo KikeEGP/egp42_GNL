@@ -6,11 +6,21 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/09 20:52:22 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:23:48 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-strlen_gnl//like strlen
+#include "get_next_line.h"
+
+size_t	strlen_gnl(const char *str)//		like strlen
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
 
 void	*memcpy_line(void *dest, const void *src, size_t len)//	like mempcy
 {
@@ -69,7 +79,5 @@ char	*join_line(char const *line, char const *buffer)//	like strjoin
 	aux[len_joined] = '\0';
 	aux = memcpy_line(aux, line, len_line);
 	aux = memcpy_line(&aux[len_line], buffer, len_buffer);
-	while (len_line -- > 0)
-		aux--;
-	return (aux);
+	return (aux-len_line);
 }

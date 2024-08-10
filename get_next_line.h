@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 19:06:49 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/03 18:32:25 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:56:13 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,16 @@
 # include <stdlib.h> // malloc and free
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE
+#  define BUFFER_SIZE 10
 # endif
 
-char	*get_next_line(int fd);
+char	*get_next_line(int fd);/*
+			
+			functions at get_next_line_utils.c
+				  					*/
+size_t	strlen_gnl(const char *str);/*			normal	strlen	*/
+void	*memcpy_line(void *dest, const void *src, size_t len);/*memcpy	*/
+char	*dup_line(const char *aux);/*				strdup	*/
+char	*join_line(char const *line, char const *buffer);/*	strjoin	*/
 
 #endif
