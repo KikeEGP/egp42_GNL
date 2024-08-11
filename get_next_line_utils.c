@@ -6,13 +6,13 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/10 16:23:48 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/11 22:28:37 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-size_t	strlen_gnl(const char *str)//		like strlen
+/*					like strlen		*/
+size_t	strlen_gnl(const char *str)
 {
 	size_t	i;
 
@@ -22,7 +22,8 @@ size_t	strlen_gnl(const char *str)//		like strlen
 	return (i);
 }
 
-void	*memcpy_line(void *dest, const void *src, size_t len)//	like mempcy
+/*					like memcpy 		*/
+void	*memcpy_line(void *dest, const void *src, size_t len)
 {
 	const char	*src_ptr;
 	char		*dest_ptr;
@@ -31,8 +32,8 @@ void	*memcpy_line(void *dest, const void *src, size_t len)//	like mempcy
 	i = 0;
 	if (!dest && !src)
 		return (NULL);
-	dest_ptr = (unsigned char *) dest;
-	src_ptr = (const unsigned char *) src;
+	dest_ptr = (char *) dest;
+	src_ptr = (const char *) src;
 	while (i < len)
 	{
 		dest_ptr[i] = src_ptr[i];
@@ -41,12 +42,13 @@ void	*memcpy_line(void *dest, const void *src, size_t len)//	like mempcy
 	return (dest);
 }
 
-char	*dup_line(const char *aux)//		like strdup
+/*					like strdup 		*/
+char	*dup_line(const char *aux)
 {
 	char	*duplicate;
 	size_t	i;
 
-	duplicate = (char *)malloc(strlen_gnl(aux) + 1) * (sizeof(char));
+	duplicate = (char *)malloc((strlen_gnl(aux) + 1) * (sizeof(char)));
 	if (!duplicate)
 		return (NULL);
 	i = 0;
@@ -59,7 +61,8 @@ char	*dup_line(const char *aux)//		like strdup
 	return (duplicate);
 }
 
-char	*join_line(char const *line, char const *buffer)//	like strjoin
+/*					like strjoin 		*/
+char	*join_line(char const *line, char const *buffer)
 {
 	char	*aux;
 	size_t	len_line;

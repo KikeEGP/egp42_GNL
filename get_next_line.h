@@ -6,12 +6,12 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 19:06:49 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/10 15:56:13 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/11 17:10:32 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE.H
-# define GET_NEXT_LINE.H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
 # include <unistd.h> // read()
 # include <fcntl.h> // open()
