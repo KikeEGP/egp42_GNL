@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/11 22:28:37 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/12 20:12:43 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,18 @@ void	*memcpy_line(void *dest, const void *src, size_t len)
 }
 
 /*					like strdup 		*/
-char	*dup_line(const char *aux)
+char	*dup_line(const char *line)
 {
 	char	*duplicate;
 	size_t	i;
 
-	duplicate = (char *)malloc((strlen_gnl(aux) + 1) * (sizeof(char)));
+	duplicate = (char *)malloc((strlen_gnl(line) + 1) * (sizeof(char)));
 	if (!duplicate)
 		return (NULL);
 	i = 0;
-	while (aux[i])
+	while (line[i])
 	{
-		duplicate[i] = aux[i];
+		duplicate[i] = line[i];
 		i++;
 	}
 	duplicate[i] = '\0';
@@ -64,7 +64,7 @@ char	*dup_line(const char *aux)
 /*					like strjoin 		*/
 char	*join_line(char const *line, char const *buffer)
 {
-	char	*aux;
+	char	*new;
 	size_t	len_line;
 	size_t	len_buffer;
 	size_t	len_joined;
@@ -76,11 +76,11 @@ char	*join_line(char const *line, char const *buffer)
 	len_line = strlen_gnl(line);
 	len_buffer = strlen_gnl(buffer);
 	len_joined = len_line + len_buffer;
-	aux = (char *)malloc((len_joined + 1) * sizeof(char));
-	if (!aux)
+	new = (char *)malloc((len_joined + 1) * sizeof(char));
+	if (!new)
 		return (NULL);
-	aux[len_joined] = '\0';
-	aux = memcpy_line(aux, line, len_line);
-	aux = memcpy_line(&aux[len_line], buffer, len_buffer);
-	return (aux-len_line);
+	new[len_joined] = '\0';
+	new = memcpy_line(new, line, len_line);
+	new = memcpy_line(&new[len_line], buffer, len_buffer);
+	return (new-len_line);
 }

@@ -6,21 +6,11 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/11 22:25:48 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/12 20:45:05 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-static void	failure(char *line, char *buf, char *aux)
-{
-	if (line)
-		free(line);
-	if (buf)
-		free(buf);
-	if (aux)
-		free(aux);
-}
 
 /*					As strchr, but just for '\n'*/
 static char	*end_line(const char *s)
@@ -37,7 +27,7 @@ static char	*end_line(const char *s)
 /*			If buffer has chars after \n, keep for next call*/
 static char	*keep_line(char *buf)
 {
-	char	*aux;
+	char	*next;
 	char	*end;
 	end = end_line(buf);
 	if (end+1 == NULL)
@@ -45,9 +35,9 @@ static char	*keep_line(char *buf)
 		free(buf);
 		return (NULL);
 	}
-	aux = dup_line(end+1);
+	next = dup_line(end+1);
 	free(buf);
-	return (aux);
+	return (next);
 }
 
 /*				It's like substr to get the complete line*/
@@ -57,7 +47,7 @@ static char	*line_returned(char *aux)
 	char	*end;
 	size_t	len;
 
-	if (aux)
+	if (aux != NULL)
 	{
 		end = end_line(aux);
 		len = strlen_gnl(aux) - strlen_gnl(end);
@@ -70,77 +60,81 @@ static char	*line_returned(char *aux)
 	}
 	return (NULL);
 }
-
-char	*get_next_line(int fd)
+/*	THIS IS A TRY TO DIVIDE THE FUNCTION	*/
+static char	*line_readed(int fd, char *aux, char *line)
 {
-	static char	*aux;
-	char		*line;
-	char		*buf;
-	ssize_t		nb_read;
+	ssize_t	nb_read;
+	char	*buf;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (aux)//WHEN COMPILE, THIS MAKES ERROR 'CAUSE IT'S UNINITIALIZE
-		//CHECK ALSO var line at the while, 89.9
-	{
-			line = dup_line(aux);
-			free(aux);
-	}
 	nb_read = 1;
-	while (line && nb_read != 0)//BE_CAREFUL, AT END OF FILE YOU MUST RETURN LINE
+	while (!end_line(buf) || nb_read != 0)
 	{
 		buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if (!buf)
+		nb_read = read(fd, buf, BUFFER_SIZE);
+		if (nb_read == -1)
 		{
-			failure(line, buf, aux);
-			return (NULL);
-		}
-		nb_read = read(fd, buf, BUFFER_SIZE); //May I protect
-						       //the BUFFER_SIZE
-						       //from SSIZE_MAX value
-		if (nb_read <= 0)
-		{
-			failure(line, buf, aux);
+			free(buf);
 			return (NULL);
 		}
 		buf[nb_read] = '\0';
 		aux = join_line(line, buf);
-		if (!aux)
-		{
-			failure(line, buf, aux);
+	}
+	return (aux);
+}
+/*		ESTO ESTÁ EN CUARENTENA		*/
+
+char	*get_next_line(int fd)
+{
+	static char	*next;/*Just for next line*/
+	char		*line;/*char * that i return*/
+	char		*buf;/*For read*/
+	ssize_t		nb_read;/*For read*/
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (next != NULL)//CHECK var line, UNINITIALIZE
+	{
+			line = dup_line(next);
+			free(next);
+	}
+	nb_read = 1;//ZONA DE LECTURA
+	while (nb_read != 0)//BE_CAREFUL, AT END OF FILE YOU MUST RETURN LINE
+	{
+		buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+		if (!buf)
 			return (NULL);
+		nb_read = read(fd, buf, BUFFER_SIZE);
+		if (nb_read == -1)
+		{
+			free(buf);
+			return (NULL);
+		}
+		buf[nb_read] = '\0';
+		line = join_line(line, buf);//AQUÍ SE JUNTA LO QUE VA LEYENDO
+		if (!line)
+		{
+			/*HEY, DO SOMETHING HERE*/
 		}
 		if (end_line(buf)) /*This conditional must stop the function*/
 		{
-			line = line_returned(aux);
+			line = line_returned(line);//AQUÍ INVOCAMOS FUNCIÓN
+						  //PARA DEVOLVER LÍNEA Y PARAR
 			if (!line)
 			{
 				failure(line, buf, aux);
 				return (NULL);
 			}
-			free(aux);
-			aux = keep_line(buf);
+			next = keep_line(buf);//AQUÍ INVOCAMOS FUNCIÓN PARA
+					     //GUARDAR INICIO DE PRÓXIMA
 			free(buf);
-			return (line);
-		}
-		else
-		{
-			line = dup_line(aux);//End of file or not found \n
-			if (!line)
-			{
-				failure(line, buf, aux);
-				return (NULL);
-			}
-			free(aux);
-			free(buf);
-
+			return (line);//STOP
 		}
 	}
 	if (line)
 		return (line);// if nb_read == 0, return line that we have
 	return	(0);
 }
-
+/*
 int	main(void)
 {
 	int	fd;
@@ -155,4 +149,4 @@ int	main(void)
 		free(lines);
 	}
 	return (0);
-}
+}*/
