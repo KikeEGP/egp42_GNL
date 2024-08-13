@@ -82,6 +82,7 @@ static char	*line_readed(int fd, char *line)
 			return (NULL);
 		}
 		buf[nb_read] = '\0';
+		printf("Ha leído %s", buf);/*DEBUG !!!!!*/
 		line = join_line(line, buf);
 	}
 	return (line);
