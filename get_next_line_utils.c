@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/14 14:57:14 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:41:24 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*memcpy_line(void *dest, const void *src, size_t len)
 	char		*dest_ptr;
 	size_t		i;
 
-	printf("--memcpy here, hi. Received src <%p>\n", src);/*to debug, remove!*/
+	/*printf("--memcpy here, hi. Received src <%p>\n", src);to debug, remove!*/
 	i = 0;
 	if (!dest && !src)
 		return (NULL);
@@ -42,7 +42,7 @@ void	*memcpy_line(void *dest, const void *src, size_t len)
 		dest_ptr[i] = src_ptr[i];
 		i++;
 	}
-	printf("--memcpy. dest is <%p>\n", dest);/*TO DEBUG, REMOVE*/
+	/*printf("--memcpy. dest is <%p>\n", dest);TO DEBUG, REMOVE*/
 	return (dest);
 }
 
@@ -52,7 +52,7 @@ char	*dup_line(const char *line)
 	char	*duplicate;
 	size_t	i;				/*HEY, STRLEN NOT */
 
-	printf("--dupline. Received <%s>\n", line);/*TO DEBUGT, REMOVE*/
+	/*printf("--dupline. Received <%s>\n", line);TO DEBUGT, REMOVE*/
 	duplicate = (char *)malloc((strlen(line) + 1) * (sizeof(char)));
 	if (!duplicate)
 		return (NULL);
@@ -78,8 +78,8 @@ char	*join_line(char const *line, char const *buffer)
 		return (NULL);
 	if (!line && buffer)
 		return (dup_line(buffer));
-	len_line = strlen(line); /*put your strlen here*/
-	len_buffer = strlen(buffer);
+	len_line = strlen_gnl(line);
+	len_buffer = strlen_gnl(buffer);
 	len_joined = len_line + len_buffer;
 	new = (char *)malloc((len_joined + 1) * sizeof(char));
 	if (!new)
