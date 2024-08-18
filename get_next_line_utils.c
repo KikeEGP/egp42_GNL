@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/14 15:41:24 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/18 18:48:28 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	*memcpy_line(void *dest, const void *src, size_t len)
 	char		*dest_ptr;
 	size_t		i;
 
-	/*printf("--memcpy here, hi. Received src <%p>\n", src);to debug, remove!*/
 	i = 0;
 	if (!dest && !src)
 		return (NULL);
@@ -42,7 +41,6 @@ void	*memcpy_line(void *dest, const void *src, size_t len)
 		dest_ptr[i] = src_ptr[i];
 		i++;
 	}
-	/*printf("--memcpy. dest is <%p>\n", dest);TO DEBUG, REMOVE*/
 	return (dest);
 }
 
@@ -50,10 +48,9 @@ void	*memcpy_line(void *dest, const void *src, size_t len)
 char	*dup_line(const char *line)
 {
 	char	*duplicate;
-	size_t	i;				/*HEY, STRLEN NOT */
+	size_t	i;
 
-	/*printf("--dupline. Received <%s>\n", line);TO DEBUGT, REMOVE*/
-	duplicate = (char *)malloc((strlen(line) + 1) * (sizeof(char)));
+	duplicate = (char *)malloc((strlen_gnl(line) + 1) * (sizeof(char)));
 	if (!duplicate)
 		return (NULL);
 	i = 0;

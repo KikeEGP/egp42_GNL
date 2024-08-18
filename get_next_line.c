@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/14 15:48:28 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/18 18:41:43 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,10 @@
 /*					As strchr, but just for '\n'*/
 static char	*end_line(const char *s)
 {
-	/*printf("--This is end_line(). We have received <%s>\n", s);*/
 	while (*s)
 	{
 		if (*s == '\n')
-		{
-			/*printf("--This is end_line(). ptr now is <%s>\n", s);*/
 			return ((char *)s);
-		}
 		s++;
 	}
 	return (0);
@@ -33,11 +29,9 @@ static char	*keep_line(char *buf)
 {
 	char	*next;
 	char	*end;
-	
+
 	end = end_line(buf);
-	/*printf("--keep_line has line <%s>\n", buf);TO DEBUG, REMOVE LATER*/
-	/*printf("--keep_line has end <%s>\n", end);TO DEBUG, REMOVE LATER*/
-	if (end + 1 != NULL)
+	if (end)
 	{
 		next = dup_line(end + 1);
 		return (next);
@@ -52,17 +46,14 @@ static char	*line_returned(char *line)
 	char	*end;
 	size_t	len;
 
-	if (line != NULL)
+	if (line != NULL && end_line(line))
 	{
-		/*printf("--Returned have <%s>.\n", line);BUG*/
 		end = end_line(line);
-		/*printf("--At returned(). End ptr to <%s>\n", end);BUG*/
 		len = strlen_gnl(line) - strlen_gnl(end);
 		the_line = (char *)malloc((len + 1) * sizeof(char));
 		if (!the_line)
 			return (NULL);
 		the_line[len] = '\0';
-		/*printf("--Returned created the_line <%s>.\n", the_line);BUG*/
 		the_line = memcpy_line(the_line, line, len);
 		return (the_line);
 	}
@@ -89,9 +80,7 @@ static char	*line_readed(int fd, char *line)
 			return (NULL);
 		}
 		buf[nb_read] = '\0';
-		/*printf("--read() readed <%s>\n", buf);DEBUG, REMOVE LATEr*/
 		line = join_line(line, buf);
-		/*printf("--join_line returns <%s>\n", line);DEBUG, REMOVE LATER*/
 	}
 	free(buf);
 	return (line);
@@ -106,35 +95,31 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = line_readed(fd, next);
 	if (!line)
-		return(NULL);
+		return (NULL);
 	free (next);
-	/*HEY, THIS BELOW IS TO DEBUG. REMOVE LATER*/
-	/*printf("--GNL here. <%s> ready to enter to keep_line()\n", line);*/
 	next = keep_line(line);
-	/*HEY, THIS BELOW IS TO DEBUG. REMOVE LATER*/
-	printf("--GNL here. <%s> ready to enter to returned()\n", line);
 	line = line_returned(line);
 	if (!line)
 	{
 		free(line);
 		return (NULL);
 	}
-	printf("--line <%s>\n", line);	/*TO DEBUGT, REMOVE LATER*/
 	return (line);
 }
 
-
-int	main(void)/*FUNCTION SEEMS TO WORK, CHECK MAIN*/
+int	main(void)
 {
 	int	fd;
 	char	*lines;
 
 	fd = open("trying_read.txt", O_RDONLY);
-	while (get_next_line(fd) != NULL)
+	lines = "";
+	while (lines != NULL)
 	{	
 		lines = get_next_line(fd);
+		//printf("--MAIN: lines <%s>\n", lines);
 		if (lines)
-			printf("%s", lines);
+			printf("**RESULT %s\n", lines);
 		free(lines);
 	}
 	return (0);
