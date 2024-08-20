@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/18 18:41:43 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/20 20:52:20 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static char	*keep_line(char *buf)
 	if (end)
 	{
 		next = dup_line(end + 1);
+		if (!next)
+			return (NULL);
 		return (next);
 	}
 	return (NULL);
@@ -93,14 +95,20 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = line_readed(fd, next);
-	if (!line)
-		return (NULL);
-	free (next);
+	if (next && end_line(next))
+		line = dup_line(next);
+	else
+	{
+		line = line_readed(fd, next);
+		if (!line)
+			return (NULL);
+	}
+	free(next);
 	next = keep_line(line);
 	line = line_returned(line);
 	if (!line)
 	{
+		free(next);
 		free(line);
 		return (NULL);
 	}
@@ -119,7 +127,7 @@ int	main(void)
 		lines = get_next_line(fd);
 		//printf("--MAIN: lines <%s>\n", lines);
 		if (lines)
-			printf("**RESULT %s\n", lines);
+			printf("**RESULT %s\n\n", lines);
 		free(lines);
 	}
 	return (0);
