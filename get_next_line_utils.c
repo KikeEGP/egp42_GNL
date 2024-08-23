@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/18 18:48:28 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/23 20:43:41 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ char	*dup_line(const char *line)
 	if (!duplicate)
 		return (NULL);
 	i = 0;
-	duplicate[i] = '\0';
 	while (line[i])
 	{
 		duplicate[i] = line[i];
 		i++;
 	}
+	duplicate[i] = '\0';
 	return (duplicate);
 }
 

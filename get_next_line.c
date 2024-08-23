@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/20 20:52:20 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/23 20:43:58 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ static char	*keep_line(char *buf)
 	char	*end;
 
 	end = end_line(buf);
-	if (end)
+	if (end + 1)
 	{
 		next = dup_line(end + 1);
 		if (!next)
 			return (NULL);
+		free(buf); /*MAYBE THIS?*/
 		return (next);
 	}
 	return (NULL);
@@ -63,14 +64,16 @@ static char	*line_returned(char *line)
 }
 
 /*				Scope to read and save line unitl \n	*/
-static char	*line_readed(int fd, char *line)
+static char	*line_read(int fd, char *line)
 {
 	ssize_t	nb_read;
 	char	*buf;
+	char	*aux;
 
-	buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));/***/
 	if (!buf)
 		return (NULL);
+	buf[BUFFER_SIZE] = '\0'; /*PROTECT TO SEG.FAULTS BY OVERFLOW IN END_LINE*/
 	nb_read = 1;
 	while (!end_line(buf) && nb_read != 0)
 	{
@@ -82,7 +85,9 @@ static char	*line_readed(int fd, char *line)
 			return (NULL);
 		}
 		buf[nb_read] = '\0';
+		aux = line;
 		line = join_line(line, buf);
+		free(aux);
 	}
 	free(buf);
 	return (line);
@@ -90,31 +95,28 @@ static char	*line_readed(int fd, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*next;
-	char		*line;
+	static char	*line;
+	char		*ready;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (next && end_line(next))
-		line = dup_line(next);
-	else
+	if (!line || !end_line(line))
 	{
-		line = line_readed(fd, next);
+		line = line_read(fd, line);
 		if (!line)
 			return (NULL);
 	}
-	free(next);
-	next = keep_line(line);
-	line = line_returned(line);
-	if (!line)
+	ready = line_returned(line);
+	if (!ready)
 	{
-		free(next);
 		free(line);
+		free(ready);
 		return (NULL);
 	}
-	return (line);
+	line = keep_line(line);	
+	return (ready);
 }
-
+/*
 int	main(void)
 {
 	int	fd;
@@ -131,4 +133,4 @@ int	main(void)
 		free(lines);
 	}
 	return (0);
-}
+}*/
