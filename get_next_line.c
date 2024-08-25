@@ -13,7 +13,7 @@
 #include "get_next_line.h"
 
 /*					As strchr, but just for '\n'*/
-static char	*end_line(const char *s)
+static char	*end_line(const char *s)/*MOVE THIS FUNCTION TO UTILS*/
 {
 	while (*s)
 	{
@@ -25,7 +25,7 @@ static char	*end_line(const char *s)
 }
 
 /*If buffer has chars after \n, keep for next call. Free buf, buf != next*/
-static char	*keep_line(char *buf)
+static char	*next_line(char *buf)
 {
 	char	*next;
 	char	*end;
@@ -111,7 +111,7 @@ char	*get_next_line(int fd)
 		free(ready);
 		return (NULL);
 	}
-	line = keep_line(line);
+	line = next_line(line);
 	return (ready);
 }
 /*
