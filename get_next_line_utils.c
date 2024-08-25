@@ -6,12 +6,11 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/23 20:43:41 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/25 20:01:37 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <string.h>//DELETE THISSSS !!!!!!
 
 /*					like strlen		*/
 size_t	strlen_gnl(const char *str)
@@ -63,8 +62,8 @@ char	*dup_line(const char *line)
 	return (duplicate);
 }
 
-/*					like strjoin 		*/
-char	*join_line(char const *line, char const *buffer)
+/*		like strjoin. Check, you free(line) here.	*/
+char	*join_line(char *line, char *buffer)
 {
 	char	*new;
 	size_t	len_line;
@@ -84,5 +83,6 @@ char	*join_line(char const *line, char const *buffer)
 	new[len_joined] = '\0';
 	new = memcpy_line(new, line, len_line);
 	new = memcpy_line(&new[len_line], buffer, len_buffer);
+	free(line);
 	return (new - len_line);
 }
