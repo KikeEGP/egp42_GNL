@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/25 20:24:57 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:55:32 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	main(void)
 		//printf("--MAIN: lines <%s>\n", lines);
 		if (lines)
 			printf("**RESULT %s\n\n", lines);
-   /*Check if result has it's own \n. is this correct?*/
+   //Check if result has it's own \n. is this correct?
 		free(lines);
 	}
 	return (0);
