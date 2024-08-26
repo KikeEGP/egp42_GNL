@@ -31,22 +31,22 @@ static char	*next_line(char *buf)
 }
 
 /*				It's like substr to get the complete line*/
-static char	*line_returned(char *line)
+static char	*line_returned(char *kept)
 {
-	char	*the_line;
+	char	*line;
 	char	*end;
 	size_t	len;
 
-	if (line != NULL && end_line(line))
+	if (kept != NULL && end_line(kept))
 	{
-		end = end_line(line);
-		len = strlen_gnl(line) - strlen_gnl(end);
-		the_line = (char *)malloc((len + 1) * sizeof(char));
-		if (!the_line)
+		end = end_line(kept);
+		len = strlen_gnl(kept) - strlen_gnl(end);
+		line = (char *)malloc((len + 1) * sizeof(char));
+		if (!line)
 			return (NULL);
-		the_line[len] = '\0';
-		the_line = memcpy_line(the_line, line, len);
-		return (the_line);
+		line[len] = '\0';
+		line = memcpy_line(line, kept, len);
+		return (line);
 	}
 	return (NULL);
 }
