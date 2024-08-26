@@ -24,6 +24,7 @@
 char	*get_next_line(int fd);
 /*	Part 2: functions at get_next_line_utils.c	*/
 size_t	strlen_gnl(const char *str);/*			normal	strlen	*/
+char	*end_line(const char *s); /*look well use of functions*/
 void	*memcpy_line(void *dest, const void *src, size_t len);/*memcpy	*/
 char	*dup_line(const char *aux);/*				strdup	*/
 char	*join_line(char *line, char *buffer);/*			strjoin	*/
