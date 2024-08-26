@@ -23,6 +23,18 @@ size_t	strlen_gnl(const char *str)
 	return (i);
 }
 
+/*					As strchr, but just for '\n'*/
+char	*end_line(const char *s)/*MOVE THIS FUNCTION TO UTILS*/
+{
+	while (*s)
+	{
+		if (*s == '\n')
+			return ((char *)s);
+		s++;
+	}
+	return (0);
+}
+
 /*					like memcpy 		*/
 void	*memcpy_line(void *dest, const void *src, size_t len)
 {
