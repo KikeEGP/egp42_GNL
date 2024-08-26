@@ -12,18 +12,6 @@
 
 #include "get_next_line.h"
 
-/*					As strchr, but just for '\n'*/
-static char	*end_line(const char *s)/*MOVE THIS FUNCTION TO UTILS*/
-{
-	while (*s)
-	{
-		if (*s == '\n')
-			return ((char *)s);
-		s++;
-	}
-	return (0);
-}
-
 /*If buffer has chars after \n, keep for next call. Free buf, buf != next*/
 static char	*next_line(char *buf)
 {
