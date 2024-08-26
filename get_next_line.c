@@ -81,26 +81,26 @@ static char	*line_read(int fd, char *line)
 /*Three phases: read and save, prepare line and keep next line*/
 char	*get_next_line(int fd)
 {
-	static char	*line;
-	char		*ready;
+	static char	*kept;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!line || !end_line(line))
+	if (!kept || !end_line(kept))
 	{
-		line = line_read(fd, line);
-		if (!line)
+		kept = line_read(fd, kept);
+		if (!kept)
 			return (NULL);
 	}
-	ready = line_returned(line);
-	if (!ready)
+	line = line_returned(kept);
+	if (!line)
 	{
+		free(kept);
 		free(line);
-		free(ready);
 		return (NULL);
 	}
-	line = next_line(line);
-	return (ready);
+	kept = next_line(kept);
+	return (line);
 }
 /*
 int	main(void)
