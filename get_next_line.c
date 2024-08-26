@@ -116,6 +116,7 @@ int	main(void)
 		//printf("--MAIN: lines <%s>\n", lines);
 		if (lines)
 			printf("**RESULT %s\n\n", lines);
+   /*Check if result has it's own \n. is this correct?*/
 		free(lines);
 	}
 	return (0);
