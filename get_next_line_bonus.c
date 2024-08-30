@@ -6,26 +6,14 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/25 20:41:17 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/28 20:34:46 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-/*					As strchr, but just for '\n'*/
-static char	*end_line(const char *s)
-{
-	while (*s)
-	{
-		if (*s == '\n')
-			return ((char *)s);
-		s++;
-	}
-	return (0);
-}
-
 /*If buffer has chars after \n, keep for next call. Free buf, buf != next*/
-static char	*keep_line(char *buf)
+static char	*next_line(char *buf)
 {
 	char	*next;
 	char	*end;
@@ -42,23 +30,23 @@ static char	*keep_line(char *buf)
 	return (NULL);
 }
 
-/*				It's like substr to get the complete line*/
-static char	*line_returned(char *line)
+/*It's like substr to get the complete line. end = end_line + 1 to return \n*/
+static char	*line_returned(char *kept)
 {
-	char	*the_line;
+	char	*line;
 	char	*end;
 	size_t	len;
 
-	if (line != NULL && end_line(line))
+	if (kept != NULL && end_line(kept))
 	{
-		end = end_line(line);
-		len = strlen_gnl(line) - strlen_gnl(end);
-		the_line = (char *)malloc((len + 1) * sizeof(char));
-		if (!the_line)
+		end = end_line(kept);
+		len = (strlen_gnl(kept) - strlen_gnl(end)) + 1;
+		line = (char *)malloc((len + 1) * sizeof(char));
+		if (!line)
 			return (NULL);
-		the_line[len] = '\0';
-		the_line = memcpy_line(the_line, line, len);
-		return (the_line);
+		line[len] = '\0';
+		line = memcpy_line(line, kept, len);
+		return (line);
 	}
 	return (NULL);
 }
@@ -77,7 +65,7 @@ static char	*line_read(int fd, char *line)
 	while (!end_line(buf) && nb_read != 0)
 	{
 		nb_read = read(fd, buf, BUFFER_SIZE);
-		if (nb_read == -1)
+		if (nb_read <= 0)
 		{
 			free(buf);
 			free(line);
@@ -93,42 +81,24 @@ static char	*line_read(int fd, char *line)
 /*Three phases: read and save, prepare line and keep next line*/
 char	*get_next_line(int fd)
 {
-	static char	*line;
-	char		*ready;
+	static char	*kept;	
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!line || !end_line(line))
+	if (!kept || !end_line(kept))
 	{
-		line = line_read(fd, line);
-		if (!line)
+		kept = line_read(fd, kept);
+		if (!kept)
 			return (NULL);
 	}
-	ready = line_returned(line);
-	if (!ready)
+	line = line_returned(kept);
+	if (!line)
 	{
+		free(kept);
 		free(line);
-		free(ready);
 		return (NULL);
 	}
-	line = keep_line(line);
-	return (ready);
+	kept = next_line(kept);
+	return (line);
 }
-/*
-int	main(void)
-{
-	int	fd;
-	char	*lines;
-
-	fd = open("trying_read.txt", O_RDONLY);
-	lines = "";
-	while (lines != NULL)
-	{	
-		lines = get_next_line(fd);
-		//printf("--MAIN: lines <%s>\n", lines);
-		if (lines)
-			printf("**RESULT %s\n\n", lines);
-		free(lines);
-	}
-	return (0);
-}*/

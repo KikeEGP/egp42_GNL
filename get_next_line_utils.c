@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/25 20:01:37 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/30 15:54:21 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ size_t	strlen_gnl(const char *str)
 }
 
 /*					As strchr, but just for '\n'*/
-char	*end_line(const char *s)/*MOVE THIS FUNCTION TO UTILS*/
+char	*end_line(const char *s)
 {
 	while (*s)
 	{

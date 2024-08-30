@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 19:06:49 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/25 19:58:20 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:32:32 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h> /*malloc and free*/
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 19
 # endif
 
 char	*get_next_line(int fd);

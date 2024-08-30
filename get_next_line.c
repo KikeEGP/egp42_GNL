@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/26 14:55:32 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/30 21:42:45 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*next_line(char *buf)
 	char	*end;
 
 	end = end_line(buf);
-	if (end + 1)
+	if (end)
 	{
 		next = dup_line(end + 1);
 		if (!next)
@@ -27,10 +27,11 @@ static char	*next_line(char *buf)
 		free(buf);
 		return (next);
 	}
+	free(buf);
 	return (NULL);
 }
 
-/*				It's like substr to get the complete line*/
+/*Like substr. len = strlens + 1. If kept but no \n, dup_line*/
 static char	*line_returned(char *kept)
 {
 	char	*line;
@@ -40,7 +41,7 @@ static char	*line_returned(char *kept)
 	if (kept != NULL && end_line(kept))
 	{
 		end = end_line(kept);
-		len = strlen_gnl(kept) - strlen_gnl(end);
+		len = (strlen_gnl(kept) - strlen_gnl(end)) + 1;
 		line = (char *)malloc((len + 1) * sizeof(char));
 		if (!line)
 			return (NULL);
@@ -48,6 +49,8 @@ static char	*line_returned(char *kept)
 		line = memcpy_line(line, kept, len);
 		return (line);
 	}
+	else if (kept != NULL)
+		return (dup_line(kept));
 	return (NULL);
 }
 
@@ -65,7 +68,7 @@ static char	*line_read(int fd, char *line)
 	while (!end_line(buf) && nb_read != 0)
 	{
 		nb_read = read(fd, buf, BUFFER_SIZE);
-		if (nb_read == -1)
+		if (nb_read <= 0 && !line)
 		{
 			free(buf);
 			free(line);
@@ -102,22 +105,3 @@ char	*get_next_line(int fd)
 	kept = next_line(kept);
 	return (line);
 }
-/*
-int	main(void)
-{
-	int	fd;
-	char	*lines;
-
-	fd = open("trying_read.txt", O_RDONLY);
-	lines = "";
-	while (lines != NULL)
-	{	
-		lines = get_next_line(fd);
-		//printf("--MAIN: lines <%s>\n", lines);
-		if (lines)
-			printf("**RESULT %s\n\n", lines);
-   //Check if result has it's own \n. is this correct?
-		free(lines);
-	}
-	return (0);
-}*/

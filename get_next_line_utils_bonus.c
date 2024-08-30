@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:29:37 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/25 20:39:22 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:14:43 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ size_t	strlen_gnl(const char *str)
 	while (str[i] != '\0')
 		i++;
 	return (i);
+}
+
+/*					As strchr, but just for '\n'*/
+char	*end_line(const char *s)
+{
+	while (*s)
+	{
+		if (*s == '\n')
+			return ((char *)s);
+		s++;
+	}
+	return (0);
 }
 
 /*					like memcpy 		*/
