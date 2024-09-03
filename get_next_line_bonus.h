@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 19:06:49 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/26 15:13:23 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/09/02 20:09:38 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
+# endif
+
+# ifndef MAX_FD
+#  define MAX_FD 1024/*OPEN_MAX deprecated. ulimit -n says 1024*/
 # endif
 
 char	*get_next_line(int fd);

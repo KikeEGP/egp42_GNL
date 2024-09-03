@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/08/28 20:34:46 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/09/03 21:12:45 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,22 @@ static char	*next_line(char *buf)
 	char	*end;
 
 	end = end_line(buf);
-	if (end + 1)
+	if (end)
 	{
 		next = dup_line(end + 1);
 		if (!next)
+		{
+			free(buf);
 			return (NULL);
+		}
 		free(buf);
 		return (next);
 	}
+	free(buf);
 	return (NULL);
 }
 
-/*It's like substr to get the complete line. end = end_line + 1 to return \n*/
+/*Like substr. len = strlens + 1. If kept but no \n, dup_line*/
 static char	*line_returned(char *kept)
 {
 	char	*line;
@@ -48,6 +52,8 @@ static char	*line_returned(char *kept)
 		line = memcpy_line(line, kept, len);
 		return (line);
 	}
+	else if (kept != NULL)
+		return (dup_line(kept));
 	return (NULL);
 }
 
@@ -65,14 +71,12 @@ static char	*line_read(int fd, char *line)
 	while (!end_line(buf) && nb_read != 0)
 	{
 		nb_read = read(fd, buf, BUFFER_SIZE);
-		if (nb_read <= 0)
-		{
-			free(buf);
-			free(line);
-			return (NULL);
-		}
+		if (nb_read <= 0 && !line)
+			return (free(buf), free(line), NULL);
 		buf[nb_read] = '\0';
 		line = join_line(line, buf);
+		if (!line)
+			return (free(buf), free(line), NULL);
 	}
 	free(buf);
 	return (line);
@@ -81,24 +85,27 @@ static char	*line_read(int fd, char *line)
 /*Three phases: read and save, prepare line and keep next line*/
 char	*get_next_line(int fd)
 {
-	static char	*kept;	
+	static char	*kept[MAX_FD];	
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!kept || !end_line(kept))
+	if (!kept[fd] || !end_line(kept[fd]))
 	{
-		kept = line_read(fd, kept);
-		if (!kept)
+		kept[fd] = line_read(fd, kept[fd]);
+		if (!kept[fd])
+		{
+			free(kept[fd]);
 			return (NULL);
+		}
 	}
-	line = line_returned(kept);
+	line = line_returned(kept[fd]);
 	if (!line)
 	{
-		free(kept);
+		free(kept[fd]);
 		free(line);
 		return (NULL);
 	}
-	kept = next_line(kept);
+	kept[fd] = next_line(kept[fd]);
 	return (line);
 }
