@@ -68,7 +68,7 @@ static char	*line_read(int fd, char *line)
 	if (!buf)
 		return (NULL);
 	i = 0;
-	while (i != BUFFER_SIZE)
+	while (i <= BUFFER_SIZE)
 		buf[i++] = '\0';
 	nb_read = 1;
 	while (!end_line(buf) && nb_read != 0)
