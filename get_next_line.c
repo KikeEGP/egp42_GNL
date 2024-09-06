@@ -6,7 +6,7 @@
 /*   By: enrgil-p <enrgil-p@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 18:30:21 by enrgil-p          #+#    #+#             */
-/*   Updated: 2024/09/03 23:17:23 by enrgil-p         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:28:21 by enrgil-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*line_returned(char *kept)
 static char	*line_read(int fd, char *line)
 {
 	ssize_t	nb_read;
-	size_t	i;
+	int		i;
 	char	*buf;
 
 	buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
